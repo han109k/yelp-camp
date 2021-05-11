@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const path = require("path");
 const Campground = require("./models/campground");
 const methodOverride = require("method-override");
+//
+const ejsMate = require("ejs-mate"); 
 const app = express();
 
 
@@ -18,7 +20,8 @@ db.once('open', function() {
     console.log("Database connected");
 });
 
-
+//  View engines
+app.engine("ejs", ejsMate);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 // for parsing request body
@@ -26,7 +29,9 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'))
 
 
-// ROUTES
+/* 
+*       ROUTES
+*/
 app.get("/",  (req, res) => {
     res.render("home")
 })

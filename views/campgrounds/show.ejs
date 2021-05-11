@@ -1,27 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show</title>
-</head>
-<body>
+<% layout("layouts/boilerplate") %>
 
-    <h1><%=campground.title%></h1>  
-    <h2><%=campground.location%></h2>
-    <p>
-        <a href="/campgrounds/<%=campground._id%>/edit">&rarr; Edit Campground</a>
+<h1><%=campground.title%></h1>  
+<h2><%=campground.location%></h2>
+<p>
+    <a href="/campgrounds/<%=campground._id%>/edit">&rarr; Edit Campground</a>
 
-        <form id="deletion" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
-            <a href="javascript:;" onclick="document.getElementById('deletion').submit();">Delete</a>
-            <input type="hidden" name="mess" value=Delete/>
-        </form>
-    </p>
+    <form id="deletion" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
+        <a href="javascript:;" onclick="document.getElementById('deletion').submit();">&LeftArrowBar; Delete</a>
+        <input type="hidden" name="mess" value=Delete/>
+    </form>
+</p>
 
-    <footer>
-        <a href="/campgrounds">&crarr; All Campgrounds</a>
-    </footer>
-
-</body>
-</html>
+<footer>
+    <a href="/campgrounds">&crarr; All Campgrounds</a>
+</footer>
