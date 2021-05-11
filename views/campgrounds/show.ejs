@@ -1,16 +1,28 @@
 <% layout("layouts/boilerplate") %>
 
-<h1><%=campground.title%></h1>  
-<h2><%=campground.location%></h2>
-<p>
-    <a href="/campgrounds/<%=campground._id%>/edit">&rarr; Edit Campground</a>
-
-    <form id="deletion" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
-        <a href="javascript:;" onclick="document.getElementById('deletion').submit();">&LeftArrowBar; Delete</a>
-        <input type="hidden" name="mess" value=Delete/>
-    </form>
-</p>
-
-<footer>
-    <a href="/campgrounds">&crarr; All Campgrounds</a>
-</footer>
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class="card mb-3">
+            <img src="<%=campground.image%>" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title"><%=campground.title%></h5>
+                <p class="card-text"><%=campground.description%></p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><%=campground.location%></li>
+                <li class="list-group-item">$<%=campground.price%>/Night</li>
+            </ul>
+            <div class="card-body">
+                <a  class="card-link btn btn-info" href="/campgrounds/<%=campground._id%>/edit">Edit Campground</a>
+                <form class="d-inline" id="deletion" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
+                    <a class="btn btn-danger" href="javascript:;" onclick="document.getElementById('deletion').submit();">Delete</a>
+                    <input type="hidden" name="mess" value=Delete />
+                </form>
+                
+            </div>
+            <div class="card-footer text-center">
+                <a href="/campgrounds">&crarr; All Campgrounds</a>
+            </div>
+        </div>
+    </div>
+</div>
