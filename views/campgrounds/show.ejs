@@ -15,8 +15,7 @@
             <div class="card-body">
                 <a  class="card-link btn btn-info" href="/campgrounds/<%=campground._id%>/edit">Edit Campground</a>
                 <form class="d-inline" id="deletion" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
-                    <a class="btn btn-danger" href="javascript:;" onclick="document.getElementById('deletion').submit();">Delete</a>
-                    <input type="hidden" name="mess" value=Delete />
+                    <button class="btn btn-danger">Delete</button>
                 </form>
                 
             </div>
