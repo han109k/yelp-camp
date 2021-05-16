@@ -1,11 +1,11 @@
 <% layout("layouts/boilerplate") %>
 
 <div class="row">
-    <div class="col-6 offset-3">
+    <div class="col-6">
         <div class="card mb-3">
             <img src="<%=campground.image%>" class="card-img-top" alt="...">
             <div class="card-body">
-                <h5 class="card-title"><%=campground.title%></h5>
+                <h1 class="card-title"><%=campground.title%></h1>
                 <p class="card-text"><%=campground.description%></p>
             </div>
             <ul class="list-group list-group-flush">
@@ -19,9 +19,74 @@
                 </form>
                 
             </div>
-            <div class="card-footer text-center">
+            <!-- <div class="card-footer text-center">
                 <a href="/campgrounds">&crarr; All Campgrounds</a>
-            </div>
+            </div> -->
         </div>
     </div>
+    <div class="col-6">
+        <!-- Displaying Reviews -->
+        <h1 class="display-5">Reviews</h1>
+        <div class="card mb-3">
+        <% for(let review of campground.reviews) { %>
+            <div class="card-body">
+                <h5 class="card-title">
+                <% for (let num = 0; num < review.rating; num++) { %>
+                    &bigstar;
+                <% } %>
+                <% for (let num = 0; num < 5 - review.rating; num++) { %>
+                    &star;
+                <% } %>
+                </h5>
+                <p class="card-text"><strong>Review :</strong> <%=review.body%></p>
+                <form class="text-end" action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </div>
+        <% } %>
+        </div>
+
+        <!-- Add a Review -->
+        <h1 class="display-6">Leave a Review</h1>
+        <form action="/campgrounds/<%=campground._id%>/reviews" class="validate-form mb-3" method="POST" novalidate>
+            <div class="mb-3">
+                <label class="form-label" for="rating">
+                    Rating <span id="rev" class="text-primary"></span>
+                </label>
+                <input class="form-range" type="range" name="review[rating]" id="rating" min="1" max="5" value="5" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="body">Review</label>
+                <textarea class="form-control" name="review[body]" id="body" cols="30" rows="5" required></textarea>
+                <div class="invalid-feedback">
+                    You need to write a review.
+                  </div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<!-- Showing rating value on form-label -->
+<script>
+    const giveStar = (rat) => {
+        const p = document.createElement('p');
+        for (let num = 0; num < rat.value; num++) { 
+            p.innerText += '★';
+        }
+        for (let num = 0; num < 5 - rat.value; num++) {
+            p.innerText += '☆';
+        }
+        return p.innerText;
+    }
+
+    const rate = this.document.querySelector('.form-range');
+    const rev = this.document.getElementById('rev')
+    rev.innerText = giveStar(rate);
+    rate.addEventListener('change', () => {
+        rev.innerText = giveStar(rate);
+    });
+
+</script>
