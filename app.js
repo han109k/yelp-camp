@@ -2,11 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const Campground = require("./models/campground");
+// HTTP method overrides for HTML Forms
 const methodOverride = require("method-override");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/expressError");
-const Joi = require("joi");
-//
+// Joi Validation
+const {campgroundSchema} = require("./schemas");
+// EJS enhancer
 const ejsMate = require("ejs-mate"); 
 const app = express();
 
@@ -32,6 +34,22 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'))
 
 
+// JOI validator function
+const validateCampground = (req,res,next) => {
+    // validate() return a object => result {value, error}
+    const {error} = campgroundSchema.validate(req.body);    
+    if(error){
+        // result.error.details is an array
+        // parse messages which are seperated by comma
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    } else {
+        next();
+    }
+    //console.log(result);
+}
+
+
 /* 
 *       ROUTES
 */
@@ -39,7 +57,7 @@ app.get("/",  (req, res) => {
     res.render("home")
 })
 
-app.get("/campgrounds",  catchAsync(async (req, res) => {
+app.get("/campgrounds", catchAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render("campgrounds/index", { campgrounds });
 }))
@@ -48,8 +66,7 @@ app.get("/campgrounds/new", (req, res) => {
     res.render("campgrounds/new");
 })
 
-app.post("/campgrounds", catchAsync(async (req, res, next) => {
-    if(!req.body.campground) throw new ExpressError("Invalid Campground Data", 400);
+app.post("/campgrounds", validateCampground, catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
@@ -65,13 +82,13 @@ app.get("/campgrounds/:id/edit", catchAsync(async (req, res) => {
     res.render("campgrounds/edit", { campground });
 }))
 
-app.put("/campgrounds/:id", catchAsync(async (req,res) => {
+app.put("/campgrounds/:id", validateCampground, catchAsync(async (req,res) => {
     const campground = await Campground.findByIdAndUpdate({_id : req.params.id}, {...req.body.campground}, {new: true});
     console.log(campground);
     res.redirect(`/campgrounds/${campground._id}`);
 }))
 
-app.delete("/campgrounds/:id",catchAsync(async (req, res) => {
+app.delete("/campgrounds/:id", catchAsync(async (req, res) => {
     const campground = await Campground.findByIdAndDelete(req.params.id);
     console.log(campground);
     res.redirect("/campgrounds");
