@@ -1,0 +1,23 @@
+<!-- If req.locals.success array exists and it has a message -->
+<% if(success && success.length) { %>
+    <% const msg = success[0];
+    console.log(msg);
+    if(msg == "Successfully updated the campground!" || msg == "Successfully made a new campground!" || msg == "Created a review!") { %> 
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } else { %>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>   
+<% } %>
+
+<% if(error && error.length) { %>    
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>    
+<% } %>

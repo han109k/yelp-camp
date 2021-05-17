@@ -7,9 +7,11 @@ const catchAsync = require("../utils/catchAsync");
 // MongoDB campground model
 const Campground = require("../models/campground");
 
+// Custom error handling class
+const ExpressError = require("../utils/expressError");
+
 // JOI Schema for validation
 const { campgroundSchema } = require("../schemas");
-const { Router } = require("express");
 
 // JOI Validator middleware
 const validateCampground = (req, res, next) => {
@@ -45,26 +47,36 @@ router.get("/new", (req, res) => {
 router.post("/", validateCampground, catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
     await campground.save();
+    req.flash("success", "Successfully made a new campground!");
     res.redirect(`/campgrounds/${campground._id}`);
 }))
 
 // Page for showing a campground
 router.get("/:id", catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id).populate("reviews");
-    console.log(campground);
+    //console.log(campground);
+    if(!campground) {
+        req.flash("error", "Cannot find the campground")
+        return res.redirect("/campgrounds");
+    }
     res.render("campgrounds/show", { campground });
 }))
 
 // Page for editing a campground
 router.get("/:id/edit", catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
+    if(!campground) {
+        req.flash("error", "Cannot find the campground")
+        return res.redirect("/campgrounds");
+    }
     res.render("campgrounds/edit", { campground });
 }))
 
 // PUT/PATCH Route for editing/updating a campground
 router.put("/:id", validateCampground, catchAsync(async (req, res) => {
     const campground = await Campground.findByIdAndUpdate({ _id: req.params.id }, { ...req.body.campground }, { new: true });
-    console.log(campground);
+    //console.log(campground);
+    req.flash("success", "Successfully updated the campground!")
     res.redirect(`/campgrounds/${campground._id}`);
 }))
 
@@ -72,6 +84,7 @@ router.put("/:id", validateCampground, catchAsync(async (req, res) => {
 router.delete("/:id", catchAsync(async (req, res) => {
     const campground = await Campground.findByIdAndDelete(req.params.id);
     console.log(campground);
+    req.flash("success", "Successfully deleted the campground")
     res.redirect("/campgrounds");
 }))
 
