@@ -86,7 +86,7 @@ app.use("/campgrounds", campgrounds);
 // Campgrounds  router path  +  router 
 app.use("/campgrounds/:id/reviews", reviews);
 
-// for every request
+// for every other request
 app.all('*', (req, res, next) => {
     next(new ExpressError("Page Not Found", 404));
 })
