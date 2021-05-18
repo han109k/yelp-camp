@@ -2,22 +2,26 @@
 <% if(success && success.length) { %>
     <% const msg = success[0];
     console.log(msg);
-    if(msg == "Successfully updated the campground!" || msg == "Successfully made a new campground!" || msg == "Created a review!") { %> 
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <%= success %>
+    if(msg == "Successfully updated the campground!"
+        || msg == "Successfully made a new campground!"
+            || msg == "Created a review!" 
+                || msg == "Welcome back!" 
+                    || msg == "Welcome to Yelp Camp!"){ %> 
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            <h5 style="display: inline;"><%= success %></h5>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <% } else { %>
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <%= success %>
+        <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+            <h5 style="display: inline;"><%= success %></h5>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <% } %>   
 <% } %>
 
 <% if(error && error.length) { %>    
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <%= error %>
+    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+        <h5 style="display: inline;"><%= error %></h5>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>    
 <% } %>

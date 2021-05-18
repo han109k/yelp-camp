@@ -19,8 +19,15 @@ const ejsMate = require("ejs-mate");
 const app = express();
 
 // Express Routes
-const campgrounds = require("./routes/campgrounds");
-const reviews = require("./routes/reviews");
+const campgroundRoutes = require("./routes/campgrounds");
+const reviewRoutes = require("./routes/reviews");
+const userRoutes = require("./routes/users");
+
+// Passport
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+// User model
+const User = require("./models/user");
 
 // Serving static files; defining the path
 app.use(express.static(__dirname + "/public"));
@@ -54,7 +61,8 @@ const sessionConfig = {
     cookie : {
         httpOnly: true, // by default it is true
         expries: Date.now() + 1000 * 60 * 60 * 24 * 7,  // after 1 week
-        maxAge: 1000 * 60 * 60 * 24 * 7
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        sameSite: true
     }
 }
 
@@ -64,8 +72,19 @@ app.use(session(sessionConfig));
 // Flash package use
 app.use(flash());
 
+// Passport intialization
+app.use(passport.initialize());
+app.use(passport.session());
+// Telling passport to use local strategy you can have more than one strategy
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 // Every single request we define a flash message that can be used during req/res cycle.
 app.use((req, res, next) => {
+    console.log(req.session);
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
@@ -81,10 +100,13 @@ app.get("/", (req, res) => {
 })
 
 // Campgrounds  router path  +  router 
-app.use("/campgrounds", campgrounds);
+app.use("/campgrounds", campgroundRoutes);
 
-// Campgrounds  router path  +  router 
-app.use("/campgrounds/:id/reviews", reviews);
+// Reviews  router path  +  router 
+app.use("/campgrounds/:id/reviews", reviewRoutes);
+
+// Users  router path  +  router
+app.use('/', userRoutes);
 
 // for every other request
 app.all('*', (req, res, next) => {
