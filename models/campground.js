@@ -8,6 +8,10 @@ const CampgroundSchema = new Schema({
     price: Number,
     description: String,
     location: String,
+    author: {   // authorization
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
     reviews : [
         {
             type: Schema.Types.ObjectId,
@@ -16,6 +20,7 @@ const CampgroundSchema = new Schema({
     ]
 });
 
+// used for campgrounds/delete
 CampgroundSchema.post("findOneAndDelete", async (doc) => {
     console.log(doc);
     if(doc) {   // if we found the document that deleted
