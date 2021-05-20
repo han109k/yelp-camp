@@ -4,9 +4,6 @@ const router = express.Router();
 // Error handling middleware
 const catchAsync = require("../utils/catchAsync");
 
-// MongoDB campground model
-const Campground = require("../models/campground");
-
 // log in checker
 const { isLoggedIn } = require("../utils/middleware");
 
@@ -16,72 +13,41 @@ const { validateCampground } = require("../utils/middleware");
 // checking authority middleware
 const { isAuthor } = require("../utils/middleware");
 
+// Controller : campgrounds
+const campgrounds = require("../controllers/campgrounds");
+
 /*
 *   ROUTES
 */
 
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+
 // List all campgrounds
-router.get("/", catchAsync(async (req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render("campgrounds/index", { campgrounds });
-}))
+//router.get("/", catchAsync(campgrounds.index));
 
 // Page for adding a new campground
-router.get("/new", isLoggedIn, (req, res) => {
-    res.render("campgrounds/new");
-})
+router.get("/new", isLoggedIn, campgrounds.renderNewForm);
 
 // POST Route for adding a new campground
-router.post("/", isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
-    const campground = new Campground(req.body.campground);
-    campground.author = req.user._id;   // adding campground's author
-    await campground.save();
-    req.flash("success", "Successfully made a new campground!");
-    res.redirect(`/campgrounds/${campground._id}`);
-}))
+//router.post("/", isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+
+router.route("/:id")
+    .get(catchAsync(campgrounds.showCampground))
+    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground))
+    .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground));
 
 // Page for showing a campground
-router.get("/:id", catchAsync(async (req, res) => {
-    // to show reviews & and author -> we use populate()
-    //const campground = await Campground.findById(req.params.id).populate("reviews").populate("author");
-    const campground = await Campground.findById(req.params.id).populate({ // populate reviews and its author then populate campground's author
-        path: "reviews",
-        populate: {
-            path: "author"
-        }
-    }).populate("author");
-    console.log(campground);
-    if(!campground) {
-        req.flash("error", "Cannot find the campground")
-        return res.redirect("/campgrounds");
-    }
-    res.render("campgrounds/show", { campground });
-}))
+//router.get("/:id", catchAsync(campgrounds.showCampground));
 
 // Page for editing a campground
-router.get("/:id/edit", isLoggedIn, isAuthor, catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id);
-    if(!campground) {
-        req.flash("error", "Cannot find the campground")
-        return res.redirect("/campgrounds");
-    }
-    res.render("campgrounds/edit", { campground });
-}))
+router.get("/:id/edit", isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm))
 
 // PUT/PATCH Route for editing/updating a campground
-router.put("/:id", isLoggedIn, isAuthor, validateCampground, catchAsync(async (req, res) => {
-    const campground = await Campground.findByIdAndUpdate({ _id: req.params.id }, { ...req.body.campground }, { new: true });
-    //console.log(campground);
-    req.flash("success", "Successfully updated the campground!")
-    res.redirect(`/campgrounds/${campground._id}`);
-}))
+//router.put("/:id", isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground));
 
 // DELETE Route for deleting a campground
-router.delete("/:id", isLoggedIn, isAuthor, catchAsync(async (req, res) => {
-    const campground = await Campground.findByIdAndDelete(req.params.id);
-    console.log(campground);
-    req.flash("success", "Successfully deleted the campground")
-    res.redirect("/campgrounds");
-}))
+//router.delete("/:id", isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground));
 
 module.exports = router;
