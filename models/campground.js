@@ -2,9 +2,23 @@ const mongoose = require("mongoose");
 const Review = require("./review");
 const Schema = mongoose.Schema;
 
+// // https://res.cloudinary.com/han109k/image/upload/c_thumb,w_200,g_face/v1621626812/YelpCamp/upzfbbups2ys2w0m2sp8.jpg
+
+const ImageSchema = new Schema({
+    url:String,
+    filename: String
+})
+
+// we dont need store thumbnail so that's why we're using virtuals with cloudinary transformation
+// calling this transformed image thumbnail
+ImageSchema.virtual("thumbnail").get(function() {
+    return this.url.replace("/upload", "/upload/w_200");
+});
+
+// As we can nest schemas
 const CampgroundSchema = new Schema({
     title: String,
-    image: String,
+    images: [ImageSchema],
     price: Number,
     description: String,
     location: String,
