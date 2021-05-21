@@ -1,3 +1,9 @@
+if (process.env.NODE_ENV !== "production") {    // checking if we in production or development environment
+    require("dotenv").config();
+}
+// accessing environment variable
+console.log(process.env.SECRET);
+
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -26,6 +32,7 @@ const userRoutes = require("./routes/users");
 // Passport
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+
 // User model
 const User = require("./models/user");
 

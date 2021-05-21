@@ -16,13 +16,26 @@ const { isAuthor } = require("../utils/middleware");
 // Controller : campgrounds
 const campgrounds = require("../controllers/campgrounds");
 
+// Multer middleware for handling multipart/form-data
+const multer = require("multer");
+//const upload = multer({ dest: "uploads/" });  // images stores on local uploads folder
+
+// Loading cloudinary settings and changing multer storage
+const { storage } = require("../cloudinary/index");
+const upload = multer({ storage });
+
+
 /*
 *   ROUTES
 */
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+    //.post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+    .post(upload.array("image"), (req, res) => {
+        console.log(req.body, req.files);
+        res.send("it workd");
+    });
 
 // List all campgrounds
 //router.get("/", catchAsync(campgrounds.index));

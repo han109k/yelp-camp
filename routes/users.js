@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
+
+// Error handling middleware
 const catchAsync = require("../utils/catchAsync");
+
+// passport.js
 const passport = require("passport");
+
+// Controller : users
 const users = require("../controllers/users");
 
 router.route("/register")

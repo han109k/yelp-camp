@@ -1,4 +1,5 @@
 <% layout("layouts/boilerplate") %>
+<link rel="stylesheet" href="/css/stars.css">
 
 <div class="row">
     <div class="col-6">
@@ -35,16 +36,13 @@
             <% for(let review of campground.reviews) { %>
                 <div class="card-body">
                     <h5 class="card-title">
-                    <% for (let num = 0; num < review.rating; num++) { %>
-                        &bigstar;
-                    <% } %>
-                    <% for (let num = 0; num < 5 - review.rating; num++) { %>
-                        &star;
-                    <% } %>
+                        <p class="starability-result" data-rating="<%=review.rating%>">
+                            Rated: <%=review.rating%> stars
+                        </p>
                     </h5>
                     <h6 class="card-subtitle mb-1 text-muted">By <%= review.author.username %></h6>
                     <p class="card-text"><strong>Review :</strong> <%=review.body%></p>
-                    <% if(currentUser && campground.author.equals(currentUser._id)) { %> 
+                    <% if(currentUser && review.author.equals(currentUser._id)) { %> 
                         <form class="text-end" action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
@@ -60,11 +58,19 @@
         <% if(currentUser) { %> 
             <h1 class="display-6">Leave a Review</h1>
             <form action="/campgrounds/<%=campground._id%>/reviews" class="validate-form mb-3" method="POST" novalidate>
-                <div class="mb-3">
-                    <label class="form-label" for="rating">
-                        Rating <span id="rev" class="text-primary"></span>
-                    </label>
-                    <input class="form-range" type="range" name="review[rating]" id="rating" min="1" max="5" value="5" required>
+                <div class="mb-0">
+                    <fieldset class="starability-basic">
+                        <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="review[rating]" value="5" checked/>
+                        <label for="first-rate5" title="Amazing">5 stars</label>
+                    </fieldset>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="body">Review</label>
@@ -80,25 +86,3 @@
         <% } %>             
     </div>
 </div>
-
-<!-- Showing rating value on form-label -->
-<script>
-    const giveStar = (rat) => {
-        const p = document.createElement('p');
-        for (let num = 0; num < rat.value; num++) { 
-            p.innerText += '★';
-        }
-        for (let num = 0; num < 5 - rat.value; num++) {
-            p.innerText += '☆';
-        }
-        return p.innerText;
-    }
-
-    const rate = this.document.querySelector('.form-range');
-    const rev = this.document.getElementById('rev')
-    rev.innerText = giveStar(rate);
-    rate.addEventListener('change', () => {
-        rev.innerText = giveStar(rate);
-    });
-
-</script>
