@@ -15,6 +15,9 @@ ImageSchema.virtual("thumbnail").get(function() {
     return this.url.replace("/upload", "/upload/w_200");
 });
 
+// adding virtuals to JSON stringfy 
+const opts = { toJSON: { virtuals: true } };
+
 // Nesting schemas
 const CampgroundSchema = new Schema({
     title: String,
@@ -43,7 +46,22 @@ const CampgroundSchema = new Schema({
             ref: "Review"
         }
     ]
-});
+}, opts);
+
+/**
+ *  // Since mapbox cluster needs field called "properties" to show pop up text on the map
+ *  // we need to define a virtual since we don't want to add these data to our MongoDB
+ *  properties : {
+ *      popUpMarkup: {
+ *          link: String,
+ *          title: String
+ *      } 
+ *  }
+ */
+CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
+    return `<a href="/campgrounds/${this._id}">${this.title}</a>`;
+    
+})
 
 // used for campgrounds/delete
 CampgroundSchema.post("findOneAndDelete", async (doc) => {

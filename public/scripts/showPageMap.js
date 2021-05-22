@@ -8,7 +8,7 @@ var map = new mapboxgl.Map({
 });
 
 var marker = new mapboxgl.Marker({
-    color: "#b7094c",
+    color: "#f72585",
     draggable: true
     })
     .setLngLat(campground.geometry.coordinates)
