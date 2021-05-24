@@ -14,6 +14,9 @@ const session = require("express-session");
 // Flash
 const flash = require("connect-flash");
 
+// Connect-Mongo
+const MongoDBStore = require("connect-mongo");
+
 // HTTP method overrides for HTML Forms
 const methodOverride = require("method-override");
 
@@ -45,8 +48,11 @@ const User = require("./models/user");
 // Serving static files; defining the path
 app.use(express.static(__dirname + "/public"));
 
+// Mongo Atlas Cluster connection handler
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+
 // Mongoose setup & connection
-mongoose.connect("mongodb://localhost:27017/yelp-camp", {
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -67,9 +73,17 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'))
 
+const secret = process.env.SECRET || 'shouldbebettersecret';
+
 const sessionConfig = {
+    // MongoDB as session store
+    store: MongoDBStore.create({
+        mongoUrl: dbUrl,
+        secret : secret,
+        touchAfter : 24 * 3600  // 24 hours
+    }),
     name: "customID",   // name that stored in browser
-    secret : "shouldbebettersecret",
+    secret : secret,
     resave : false,
     saveUninitialized: true,
     cookie : {
@@ -80,6 +94,10 @@ const sessionConfig = {
         sameSite: true
     }
 }
+//
+sessionConfig.store.on("error", function(e) {
+    console.log("Session store error", e);
+})
 
 // Express session package use
 app.use(session(sessionConfig));
