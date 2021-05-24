@@ -1,14 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>YELPCamp</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/home.css">
 </head>
-<body>
-    
-    <h1>YELP CAMP</h1>
+
+<body class="d-flex flex-column h-100 bg-dark text-white">
+
+    <header class="mb-auto">
+        <nav id="navbar" class="navbar navbar-expand-md navbar-dark">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1 py-3 px-5">YELPCamp</span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 py-3 px-5">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/campgrounds">Campgrounds</a>
+                    </li>
+                    <% if(!currentUser) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">Register</a>
+                        </li>
+                        <% } else { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Logout</a>
+                            </li>
+                            <% } %>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Begin page content -->
+    <main>
+        <div class="container text-center">
+            <h1 class="">YELPCamp</h1>
+            <p class="lead">Welcome to YELPCamp! <br> Discovery many campgrounds around the world. <br>  Deadlights jack lad
+                schooner scallywag dance the hempen jig  carouser broadside <br> cable strike colors. Bring a spring upon her
+                cable to go on account lookout wherry doubloon chase.</p>
+            <a class="btn btn-lg btn-secondary bg-white" href="/campgrounds">View Campgrounds</a>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer id="footer" class="footer mt-auto py-3">
+        <div class="container text-center">
+            <span class="text-muted">&copy; YELPCamp 2021</span>
+        </div>
+    </footer>
+
+
+
+    <!-- JavaScript dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
 
 </body>
+
 </html>
