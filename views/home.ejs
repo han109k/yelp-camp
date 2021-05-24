@@ -19,31 +19,31 @@
     <header class="mb-auto">
         <nav id="navbar" class="navbar navbar-expand-md navbar-dark">
             <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1 py-3 px-5">YELPCamp</span>
+                <span class="navbar-brand mb-0 h1 ps-5">YELPCamp</span>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-            </div>
 
-            <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 py-3 px-5">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/campgrounds">Campgrounds</a>
-                    </li>
-                    <% if(!currentUser) { %>
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-0 mx-auto px-5">
                         <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
+                            <a class="nav-link" href="/campgrounds">Campgrounds</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/register">Register</a>
-                        </li>
+                        <% if(!currentUser) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/register">Register</a>
+                            </li>
                         <% } else { %>
                             <li class="nav-item">
                                 <a class="nav-link" href="/logout">Logout</a>
                             </li>
-                            <% } %>
-                </ul>
+                        <% } %>
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
