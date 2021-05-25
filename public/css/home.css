@@ -1,5 +1,5 @@
 body {
-    background-image: linear-gradient(rgba(17, 24, 39, 0.45), rgba(17, 24, 39, 0.45)),
+    background-image: linear-gradient(rgba(17, 24, 39, 0.55), rgba(17, 24, 39, 0.55)),
     url('/imgs/landing.jpeg');
     background-size: cover;
     background-position: center;
@@ -28,8 +28,12 @@ main {
     text-decoration: underline;
 }
 
-.btn-lg {
+.btn {
     font-weight: 600;
     color: #333;
     text-shadow: none;
+}
+
+.btn:hover {
+    color: rgb(177, 177, 177);
 }

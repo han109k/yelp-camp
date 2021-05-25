@@ -9,14 +9,15 @@
 <% for(let campground of campgrounds) { %>
    <div class="card mb-3">
       <div class="row">
-         <div class="col-md-4">
+         <div class="col-md-5 col-lg-4">
             <% if(campground.images.length) { %> 
-            <img class="img-fluid " src="<%=campground.images[0].url%>"></img>
+            <!-- <img class="img-fluid" src=""></img>-->
+            <div id="index-img" style="background-image: url(<%=campground.images[0].url%>);"></div>
             <% } else { %> 
                <img src="/imgs/no-image.png" alt="no-img">
             <% } %>
          </div>
-         <div class="col-md-8">
+         <div class="col-md-7 col-lg-8">
             <div class="card-body">
                <h5 class="card-title">
                   <%=campground.title%>
