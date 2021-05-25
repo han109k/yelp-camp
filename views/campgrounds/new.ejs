@@ -21,7 +21,7 @@
             </div>
             <div class="mb-3">
                 <label for="formFile" class="form-label">Image/s</label>
-                <input class="form-control" type="file" id="formFile" name="image" multiple>
+                <input class="form-control" type="file" id="formFile" name="image" multiple required>
               </div>
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
@@ -38,10 +38,13 @@
                 </div>
             </div>
             <div class="text-center">
-                <button class="btn btn-primary text-center">Submit</button>
+                <div class="d-inline">
+                    <button class="btn btn-primary">Submit</button>
+                </div>                
+                <div class="d-inline">
+                    <a href="/campgrounds" class="btn btn-secondary">Cancel</a>
+                </div>
             </div>
-            
         </form>
-        <a href="/campgrounds">&crarr; All Campgrounds</a>
     </div>
 </div>
